@@ -1,0 +1,161 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  mongodb-auth:
+    image: mongo:4.4
+    container_name: mongodb-auth
+    ports:
+      - "27017:27017"
+    volumes:
+      - /data/mongodb-auth:/data/db
+      - ./mongo-init-scripts/auth.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/auth_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/auth_password
+      MONGO_INITDB_DATABASE: authdb
+    restart: always
+    secrets:
+      - auth_user
+      - auth_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+
+  mongodb-bills:
+    image: mongo:4.4
+    container_name: mongodb-bills
+    ports:
+      - "27018:27017"
+    volumes:
+      - /data/mongodb-bills:/data/db
+      - ./mongo-init-scripts/bills.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/bills_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/bills_password
+      MONGO_INITDB_DATABASE: billsdb
+    restart: always
+    secrets:
+      - bills_user
+      - bills_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+
+  mongodb-chat:
+    image: mongo:4.4
+    container_name: mongodb-chat
+    ports:
+      - "27019:27017"
+    volumes:
+      - /data/mongodb-chat:/data/db
+      - ./mongo-init-scripts/chat.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/chat_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/chat_password
+      MONGO_INITDB_DATABASE: chatdb
+    restart: always
+    secrets:
+      - chat_user
+      - chat_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+        
+  mongodb-chores:
+    image: mongo:4.4
+    container_name: mongodb-chores
+    ports:
+      - "27020:27017"
+    volumes:
+      - /data/mongodb-chores:/data/db
+      - ./mongo-init-scripts/chores.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/chores_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/chores_password
+      MONGO_INITDB_DATABASE: choresdb
+    restart: always
+    secrets:
+      - chores_user
+      - chores_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+        
+  mongodb-notifications:
+    image: mongo:4.4
+    container_name: mongodb-notifications
+    ports:
+      - "27021:27017"
+    volumes:
+      - /data/mongodb-notifications:/data/db
+      - ./mongo-init-scripts/notifications.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/notifications_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/notifications_password
+      MONGO_INITDB_DATABASE: notificationsdb
+    restart: always
+    secrets:
+      - notifications_user
+      - notifications_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+        
+  mongodb-users:
+    image: mongo:4.4
+    container_name: mongodb-users
+    ports:
+      - "27022:27017"
+    volumes:
+      - /data/mongodb-users:/data/db
+      - ./mongo-init-scripts/users.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/users_user
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/users_password
+      MONGO_INITDB_DATABASE: usersdb
+    restart: always
+    secrets:
+      - users_user
+      - users_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
+
+secrets:
+  auth_user:
+    file: ./secrets/auth_user.txt
+  auth_password:
+    file: ./secrets/auth_password.txt
+  bills_user:
+    file: ./secrets/bills_user.txt
+  bills_password:
+    file: ./secrets/bills_password.txt
+  chat_user:
+    file: ./secrets/chat_user.txt
+  chat_password:
+    file: ./secrets/chat_password.txt
+  chores_user:
+    file: ./secrets/chores_user.txt
+  chores_password:
+    file: ./secrets/chores_password.txt
+  notifications_user:
+    file: ./secrets/notifications_user.txt
+  notifications_password:
+    file: ./secrets/notifications_password.txt
+  users_user:
+    file: ./secrets/users_user.txt
+  users_password:
+    file: ./secrets/users_password.txt
